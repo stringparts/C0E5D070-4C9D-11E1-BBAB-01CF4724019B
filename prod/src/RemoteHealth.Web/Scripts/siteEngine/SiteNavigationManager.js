@@ -1,11 +1,11 @@
 // SiteNavigationManager class
 function SiteNavigationManager(siteTitle, siteRoot, registeredNavigationHandlers, siteContentContainerId) {
-    this.historyStack = new Array();
     this.siteTitle = siteTitle;
     this.siteRoot = siteRoot;
     this.registeredHandlers = registeredNavigationHandlers;
     this.siteContentContainerId = siteContentContainerId;
-
+    this.maxIndexNumber = 0;
+    this.currentIndexNumber = 0;
     this.initialize(this);
 }
 
@@ -17,8 +17,10 @@ SiteNavigationManager.prototype.initialize = function (siteNavManager) {
 
 SiteNavigationManager.prototype.handleNav = function (event) {
     var historyContext = {};
+    var cache = new Cache();
     if (event.state != null && event.state.index != null) {
-        historyContext = this.historyStack[event.state.index];
+        this.currentIndexNumber = event.state.index;
+        historyContext = cache.getItem("history" + event.state.index);
     }
 
     var url = document.location.toString();
@@ -43,15 +45,25 @@ SiteNavigationManager.prototype.navigateTo = function (state, nextHash, queryStr
     if (queryString == null) {
         queryString = "";
     }
+    var cache = new Cache();
+    var diff = this.maxIndexNumber - this.currentIndexNumber;
+    if (diff > 0) {
+        for (var r = 1; r < diff; ++r) {
+            cache.addItem("history" + (this.currentIndexNumber + r), null, true);
+        }
+    }
+    this.currentIndexNumber++;
+    this.maxIndexNumber = this.currentIndexNumber;
 
     var newUrl = "/" + this.siteRoot + "/" + nextHash + "?" + queryString;
     if (inPlace) {
-        history.replaceState({ change: true, type: "replace", index: this.historyStack.length }, this.siteTitle, newUrl);
+        history.replaceState({ change: true, type: "replace", index: this.currentIndexNumber }, this.siteTitle, newUrl);
     }
     else {
-        history.pushState({ change: true, type: "push", index: this.historyStack.length }, this.siteTitle, newUrl);
+        history.pushState({ change: true, type: "push", index: this.currentIndexNumber }, this.siteTitle, newUrl);
     }
-    this.historyStack.push(new HistoryContext(state, nextHash, queryString));
+
+    cache.addItem("history" + this.currentIndexNumber, new HistoryContext(state, nextHash, queryString), true);
     alert("pushed!");
 };
 

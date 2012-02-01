@@ -38,7 +38,8 @@ PatientSearchView.prototype.initializeFromState = function (state, query) {
     var request = null;
     if (state.historyState != null && state.historyState.searchRequest != null) {
         // get the search request from the history
-        request = state.historyState.searchRequest;
+        request = new PatientSearchRequest();
+        request.fromStateObject(state.historyState.searchRequest);
     } else if (query != null && (query.ln != null || query.fn != null || query.dob != null || query.gi != null)) {
         // create the search request from the query string
         request = new PatientSearchRequest(query.ln, query.fn, query.dob, query.gi);

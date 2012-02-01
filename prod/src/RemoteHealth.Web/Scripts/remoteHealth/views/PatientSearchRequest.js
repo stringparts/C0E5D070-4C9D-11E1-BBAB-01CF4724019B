@@ -14,3 +14,10 @@ PatientSearchRequest.prototype.serializeForPostback = function () {
 PatientSearchRequest.prototype.toQueryString = function () {
     return "ln=" + this.lastName + "&fn=" + this.firstName + "&dob=" + this.dateOfBirth + "&gi=" + this.governmentId;
 };
+
+PatientSearchRequest.prototype.fromStateObject = function (state) {
+    this.lastName = state.lastName;
+    this.firstName = state.firstName;
+    this.dateOfBirth = state.dateOfBirth;
+    this.governmentId = state.governmentId;
+};
