@@ -1,0 +1,31 @@
+﻿@using RemoteHealth.Data
+@model DateTime?
+
+<script>
+    $(function () {
+        $("#@ViewData["id"]").datepicker({
+            changeMonth: true,
+            changeYear: true,
+                @if (ViewData.ContainsKey("nextControlId"))
+                {
+                    <text>
+                        onSelect: function() { 
+                            $("#@ViewData["nextControlId"]").focus();
+                        }
+                    </text>
+                }
+        });
+    });
+</script>
+
+<input 
+    id="@ViewData["id"]" 
+    name="@ViewData["id"]" 
+    type="date" 
+    value= "@Html.Encode(Model.HasValue ? Model.Value.ToString(@DataUtility.DateFormat) : String.Empty)"
+    placeholder="@DataUtility.DateFormat"
+    @if (ViewData.ContainsKey("required"))
+    {
+        @:required = "required"
+    } 
+/>

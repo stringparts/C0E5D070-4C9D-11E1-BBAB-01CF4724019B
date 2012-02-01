@@ -1,0 +1,760 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="RemoteHealth.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="RemoteHealthStoreContainer">
+    <EntitySet Name="Patients" EntityType="RemoteHealth.Store.Patients" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="PatientIdentifiers" EntityType="RemoteHealth.Store.PatientIdentifiers" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Visits" EntityType="RemoteHealth.Store.Visits" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Locations" EntityType="RemoteHealth.Store.Locations" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Clinicians" EntityType="RemoteHealth.Store.Clinicians" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Notes" EntityType="RemoteHealth.Store.Notes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="HealthItems" EntityType="RemoteHealth.Store.HealthItems" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="HealthItemTypes" EntityType="RemoteHealth.Store.HealthItemTypes" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Notes_VisitNote" EntityType="RemoteHealth.Store.Notes_VisitNote" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Notes_PatientNote" EntityType="RemoteHealth.Store.Notes_PatientNote" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="Notes_HealthItemNote" EntityType="RemoteHealth.Store.Notes_HealthItemNote" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="PatientPatientIdentifiers" Association="RemoteHealth.Store.PatientPatientIdentifiers">
+      <End Role="Patient" EntitySet="Patients" />
+      <End Role="PatientIdentifiers" EntitySet="PatientIdentifiers" />
+    </AssociationSet>
+    <AssociationSet Name="VisitLocation" Association="RemoteHealth.Store.VisitLocation">
+      <End Role="Visit" EntitySet="Visits" />
+      <End Role="Location" EntitySet="Locations" />
+    </AssociationSet>
+    <AssociationSet Name="VisitClinicians" Association="RemoteHealth.Store.VisitClinicians">
+      <End Role="Visit" EntitySet="Visits" />
+      <End Role="Clinicians" EntitySet="Clinicians" />
+    </AssociationSet>
+    <AssociationSet Name="NotesClinicians" Association="RemoteHealth.Store.NotesClinicians">
+      <End Role="Notes" EntitySet="Notes" />
+      <End Role="Clinicians" EntitySet="Clinicians" />
+    </AssociationSet>
+    <AssociationSet Name="VisitVisitNotes" Association="RemoteHealth.Store.VisitVisitNotes">
+      <End Role="Visit" EntitySet="Visits" />
+      <End Role="VisitNotes" EntitySet="Notes_VisitNote" />
+    </AssociationSet>
+    <AssociationSet Name="PatientPatientNotes" Association="RemoteHealth.Store.PatientPatientNotes">
+      <End Role="Patient" EntitySet="Patients" />
+      <End Role="PatientNotes" EntitySet="Notes_PatientNote" />
+    </AssociationSet>
+    <AssociationSet Name="HealthItemTypeHealthItem" Association="RemoteHealth.Store.HealthItemTypeHealthItem">
+      <End Role="HealthItemType" EntitySet="HealthItemTypes" />
+      <End Role="HealthItem" EntitySet="HealthItems" />
+    </AssociationSet>
+    <AssociationSet Name="VisitHealthItem" Association="RemoteHealth.Store.VisitHealthItem">
+      <End Role="Visit" EntitySet="Visits" />
+      <End Role="HealthItem" EntitySet="HealthItems" />
+    </AssociationSet>
+    <AssociationSet Name="HealthItemHealthItemNote" Association="RemoteHealth.Store.HealthItemHealthItemNote">
+      <End Role="HealthItem" EntitySet="HealthItems" />
+      <End Role="HealthItemNote" EntitySet="Notes_HealthItemNote" />
+    </AssociationSet>
+    <AssociationSet Name="FK_VisitNote_inherits_Note" Association="RemoteHealth.Store.FK_VisitNote_inherits_Note">
+      <End Role="Note" EntitySet="Notes" />
+      <End Role="VisitNote" EntitySet="Notes_VisitNote" />
+    </AssociationSet>
+    <AssociationSet Name="FK_PatientNote_inherits_Note" Association="RemoteHealth.Store.FK_PatientNote_inherits_Note">
+      <End Role="Note" EntitySet="Notes" />
+      <End Role="PatientNote" EntitySet="Notes_PatientNote" />
+    </AssociationSet>
+    <AssociationSet Name="FK_HealthItemNote_inherits_Note" Association="RemoteHealth.Store.FK_HealthItemNote_inherits_Note">
+      <End Role="Note" EntitySet="Notes" />
+      <End Role="HealthItemNote" EntitySet="Notes_HealthItemNote" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Patients">
+    <Key>
+      <PropertyRef Name="PatientId" />
+    </Key>
+    <Property Name="PatientId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="DateOfBirth" Type="datetime" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="UpdatedDate" Type="datetime" Nullable="false" />
+    <Property Name="Gender" Type="int" Nullable="false" />
+    <Property Name="Image" Type="varbinary(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="PatientIdentifiers">
+    <Key>
+      <PropertyRef Name="IdentifierType" />
+      <PropertyRef Name="PatientPatientId" />
+    </Key>
+    <Property Name="IdentifierType" Type="int" Nullable="false" />
+    <Property Name="IdentifierValue" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="PatientPatientId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="IdentifierName" Type="nvarchar(max)" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Visits">
+    <Key>
+      <PropertyRef Name="VisitId" />
+    </Key>
+    <Property Name="VisitId" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="VisitDate" Type="datetime" Nullable="false" />
+    <Property Name="Location_LocationId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Locations">
+    <Key>
+      <PropertyRef Name="LocationId" />
+    </Key>
+    <Property Name="LocationId" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="LocationName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="LocationDetails" Type="nvarchar(max)" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Clinicians">
+    <Key>
+      <PropertyRef Name="ClinicianId" />
+    </Key>
+    <Property Name="ClinicianId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="LastName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="FirstName" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="ClinicianRole" Type="int" Nullable="true" />
+    <Property Name="VisitClinicians_Clinicians_VisitId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Notes">
+    <Key>
+      <PropertyRef Name="NoteId" />
+    </Key>
+    <Property Name="NoteId" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreatedDate" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="UpdatedDate" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="IsActive" Type="bit" Nullable="false" />
+    <Property Name="Clinician_ClinicianId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HealthItems">
+    <Key>
+      <PropertyRef Name="HealthItemId" />
+    </Key>
+    <Property Name="HealthItemId" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="CreatedDate" Type="datetime" Nullable="false" />
+    <Property Name="UpdatedDate" Type="datetime" Nullable="false" />
+    <Property Name="HealthItemData" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="HealthItemVersion" Type="binary" StoreGeneratedPattern="Computed" Nullable="true" MaxLength="8" />
+    <Property Name="VisitVisitId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="HealthItemTypes">
+    <Key>
+      <PropertyRef Name="HealthItemTypeId" />
+    </Key>
+    <Property Name="HealthItemTypeId" Type="uniqueidentifier" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Name" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="Version" Type="nvarchar(max)" Nullable="false" />
+    <Property Name="HealthItemTypeHealthItem_HealthItemType_HealthItemId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Notes_VisitNote">
+    <Key>
+      <PropertyRef Name="NoteId" />
+    </Key>
+    <Property Name="VisitId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NoteId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Notes_PatientNote">
+    <Key>
+      <PropertyRef Name="NoteId" />
+    </Key>
+    <Property Name="PatientId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NoteId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <EntityType Name="Notes_HealthItemNote">
+    <Key>
+      <PropertyRef Name="NoteId" />
+    </Key>
+    <Property Name="HealthItemHealthItemId" Type="uniqueidentifier" Nullable="false" />
+    <Property Name="NoteId" Type="uniqueidentifier" Nullable="false" />
+  </EntityType>
+  <Association Name="PatientPatientIdentifiers">
+    <End Role="Patient" Type="RemoteHealth.Store.Patients" Multiplicity="1" />
+    <End Role="PatientIdentifiers" Type="RemoteHealth.Store.PatientIdentifiers" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="PatientId" />
+      </Principal>
+      <Dependent Role="PatientIdentifiers">
+        <PropertyRef Name="PatientPatientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VisitLocation">
+    <End Role="Visit" Type="RemoteHealth.Store.Visits" Multiplicity="*" />
+    <End Role="Location" Type="RemoteHealth.Store.Locations" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Location">
+        <PropertyRef Name="LocationId" />
+      </Principal>
+      <Dependent Role="Visit">
+        <PropertyRef Name="Location_LocationId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VisitClinicians">
+    <End Role="Visit" Type="RemoteHealth.Store.Visits" Multiplicity="1" />
+    <End Role="Clinicians" Type="RemoteHealth.Store.Clinicians" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Visit">
+        <PropertyRef Name="VisitId" />
+      </Principal>
+      <Dependent Role="Clinicians">
+        <PropertyRef Name="VisitClinicians_Clinicians_VisitId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="NotesClinicians">
+    <End Role="Notes" Type="RemoteHealth.Store.Notes" Multiplicity="*" />
+    <End Role="Clinicians" Type="RemoteHealth.Store.Clinicians" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="Clinicians">
+        <PropertyRef Name="ClinicianId" />
+      </Principal>
+      <Dependent Role="Notes">
+        <PropertyRef Name="Clinician_ClinicianId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VisitVisitNotes">
+    <End Role="Visit" Type="RemoteHealth.Store.Visits" Multiplicity="1" />
+    <End Role="VisitNotes" Type="RemoteHealth.Store.Notes_VisitNote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Visit">
+        <PropertyRef Name="VisitId" />
+      </Principal>
+      <Dependent Role="VisitNotes">
+        <PropertyRef Name="VisitId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PatientPatientNotes">
+    <End Role="Patient" Type="RemoteHealth.Store.Patients" Multiplicity="1" />
+    <End Role="PatientNotes" Type="RemoteHealth.Store.Notes_PatientNote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Patient">
+        <PropertyRef Name="PatientId" />
+      </Principal>
+      <Dependent Role="PatientNotes">
+        <PropertyRef Name="PatientId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="HealthItemTypeHealthItem">
+    <End Role="HealthItemType" Type="RemoteHealth.Store.HealthItemTypes" Multiplicity="*" />
+    <End Role="HealthItem" Type="RemoteHealth.Store.HealthItems" Multiplicity="1" />
+    <ReferentialConstraint>
+      <Principal Role="HealthItem">
+        <PropertyRef Name="HealthItemId" />
+      </Principal>
+      <Dependent Role="HealthItemType">
+        <PropertyRef Name="HealthItemTypeHealthItem_HealthItemType_HealthItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="VisitHealthItem">
+    <End Role="Visit" Type="RemoteHealth.Store.Visits" Multiplicity="1" />
+    <End Role="HealthItem" Type="RemoteHealth.Store.HealthItems" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Visit">
+        <PropertyRef Name="VisitId" />
+      </Principal>
+      <Dependent Role="HealthItem">
+        <PropertyRef Name="VisitVisitId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="HealthItemHealthItemNote">
+    <End Role="HealthItem" Type="RemoteHealth.Store.HealthItems" Multiplicity="1" />
+    <End Role="HealthItemNote" Type="RemoteHealth.Store.Notes_HealthItemNote" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="HealthItem">
+        <PropertyRef Name="HealthItemId" />
+      </Principal>
+      <Dependent Role="HealthItemNote">
+        <PropertyRef Name="HealthItemHealthItemId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_VisitNote_inherits_Note">
+    <End Role="Note" Type="RemoteHealth.Store.Notes" Multiplicity="1" />
+    <End Role="VisitNote" Type="RemoteHealth.Store.Notes_VisitNote" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Note">
+        <PropertyRef Name="NoteId" />
+      </Principal>
+      <Dependent Role="VisitNote">
+        <PropertyRef Name="NoteId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_PatientNote_inherits_Note">
+    <End Role="Note" Type="RemoteHealth.Store.Notes" Multiplicity="1" />
+    <End Role="PatientNote" Type="RemoteHealth.Store.Notes_PatientNote" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Note">
+        <PropertyRef Name="NoteId" />
+      </Principal>
+      <Dependent Role="PatientNote">
+        <PropertyRef Name="NoteId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_HealthItemNote_inherits_Note">
+    <End Role="Note" Type="RemoteHealth.Store.Notes" Multiplicity="1" />
+    <End Role="HealthItemNote" Type="RemoteHealth.Store.Notes_HealthItemNote" Multiplicity="0..1" />
+    <ReferentialConstraint>
+      <Principal Role="Note">
+        <PropertyRef Name="NoteId" />
+      </Principal>
+      <Dependent Role="HealthItemNote">
+        <PropertyRef Name="NoteId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema xmlns="http://schemas.microsoft.com/ado/2008/09/edm" xmlns:cg="http://schemas.microsoft.com/ado/2006/04/codegeneration" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" Namespace="RemoteHealth" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation">
+        <EntityContainer Name="RemoteHealthDataProvider" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Patients" EntityType="RemoteHealth.Patient" />
+          <EntitySet Name="PatientIdentifiers" EntityType="RemoteHealth.PatientIdentifiers" />
+          <AssociationSet Name="PatientPatientIdentifiers" Association="RemoteHealth.PatientPatientIdentifiers">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="PatientIdentifiers" EntitySet="PatientIdentifiers" />
+          </AssociationSet>
+          <EntitySet Name="Visits" EntityType="RemoteHealth.Visit" />
+          <EntitySet Name="Locations" EntityType="RemoteHealth.Location" />
+          <AssociationSet Name="VisitLocation" Association="RemoteHealth.VisitLocation">
+            <End Role="Visit" EntitySet="Visits" />
+            <End Role="Location" EntitySet="Locations" />
+          </AssociationSet>
+          <EntitySet Name="Clinicians" EntityType="RemoteHealth.Clinicians" />
+          <AssociationSet Name="VisitClinicians" Association="RemoteHealth.VisitClinicians">
+            <End Role="Visit" EntitySet="Visits" />
+            <End Role="Clinicians" EntitySet="Clinicians" />
+          </AssociationSet>
+          <EntitySet Name="Notes" EntityType="RemoteHealth.Note" />
+          <AssociationSet Name="NotesClinicians" Association="RemoteHealth.NotesClinicians">
+            <End Role="Notes" EntitySet="Notes" />
+            <End Role="Clinicians" EntitySet="Clinicians" />
+          </AssociationSet>
+          <AssociationSet Name="VisitVisitNotes" Association="RemoteHealth.VisitVisitNotes">
+            <End Role="Visit" EntitySet="Visits" />
+            <End Role="VisitNotes" EntitySet="Notes" />
+          </AssociationSet>
+          <AssociationSet Name="PatientPatientNotes" Association="RemoteHealth.PatientPatientNotes">
+            <End Role="Patient" EntitySet="Patients" />
+            <End Role="PatientNotes" EntitySet="Notes" />
+          </AssociationSet>
+          <EntitySet Name="HealthItems" EntityType="RemoteHealth.HealthItem" />
+          <EntitySet Name="HealthItemTypes" EntityType="RemoteHealth.HealthItemType" />
+          <AssociationSet Name="HealthItemTypeHealthItem" Association="RemoteHealth.HealthItemTypeHealthItem">
+            <End Role="HealthItemType" EntitySet="HealthItemTypes" />
+            <End Role="HealthItem" EntitySet="HealthItems" />
+          </AssociationSet>
+          <AssociationSet Name="VisitHealthItem" Association="RemoteHealth.VisitHealthItem">
+            <End Role="Visit" EntitySet="Visits" />
+            <End Role="HealthItem" EntitySet="HealthItems" />
+          </AssociationSet>
+          <AssociationSet Name="HealthItemHealthItemNote" Association="RemoteHealth.HealthItemHealthItemNote">
+            <End Role="HealthItem" EntitySet="HealthItems" />
+            <End Role="HealthItemNote" EntitySet="Notes" />
+          </AssociationSet>
+          </EntityContainer>
+        <EntityType Name="Patient">
+          <Key>
+            <PropertyRef Name="PatientId" />
+          </Key>
+          <Property Type="Guid" Name="PatientId" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Type="String" Name="LastName" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="false" />
+          <Property Type="DateTime" Name="DateOfBirth" Nullable="false" />
+          <Property Type="DateTime" Name="CreatedDate" Nullable="false" />
+          <Property Type="DateTime" Name="UpdatedDate" Nullable="false" />
+          <Property Type="Int32" Name="Gender" Nullable="false" />
+          <NavigationProperty Name="PatientIdentifiers" Relationship="RemoteHealth.PatientPatientIdentifiers" FromRole="Patient" ToRole="PatientIdentifiers" />
+          <Property Type="Binary" Name="Image" Nullable="true" />
+          <NavigationProperty Name="PatientNotes" Relationship="RemoteHealth.PatientPatientNotes" FromRole="Patient" ToRole="PatientNotes" />
+        </EntityType>
+        <EntityType Name="PatientIdentifiers">
+          <Key>
+            <PropertyRef Name="IdentifierType" />
+            <PropertyRef Name="PatientPatientId" />
+          </Key>
+          <Property Type="Int32" Name="IdentifierType" Nullable="false" />
+          <Property Type="String" Name="IdentifierValue" Nullable="false" />
+          <Property Type="Guid" Name="PatientPatientId" Nullable="false" />
+          <Property Type="String" Name="IdentifierName" Nullable="false" />
+          </EntityType>
+        <Association Name="PatientPatientIdentifiers">
+          <End Type="RemoteHealth.Patient" Role="Patient" Multiplicity="1" />
+          <End Type="RemoteHealth.PatientIdentifiers" Role="PatientIdentifiers" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="PatientId" />
+            </Principal>
+            <Dependent Role="PatientIdentifiers">
+              <PropertyRef Name="PatientPatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Visit">
+          <Key>
+            <PropertyRef Name="VisitId" />
+          </Key>
+          <Property Type="Guid" Name="VisitId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="DateTime" Name="VisitDate" Nullable="false" />
+          <NavigationProperty Name="Location" Relationship="RemoteHealth.VisitLocation" FromRole="Visit" ToRole="Location" />
+          <NavigationProperty Name="Clinicians" Relationship="RemoteHealth.VisitClinicians" FromRole="Visit" ToRole="Clinicians" />
+          <NavigationProperty Name="VisitNotes" Relationship="RemoteHealth.VisitVisitNotes" FromRole="Visit" ToRole="VisitNotes" />
+          <NavigationProperty Name="HealthItems" Relationship="RemoteHealth.VisitHealthItem" FromRole="Visit" ToRole="HealthItem" />
+        </EntityType>
+        <EntityType Name="Location">
+          <Key>
+            <PropertyRef Name="LocationId" />
+          </Key>
+          <Property Type="Guid" Name="LocationId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="LocationName" Nullable="false" />
+          <Property Type="String" Name="LocationDetails" />
+        </EntityType>
+        <Association Name="VisitLocation">
+          <End Type="RemoteHealth.Visit" Role="Visit" Multiplicity="1" />
+          <End Type="RemoteHealth.Location" Role="Location" Multiplicity="1" />
+        </Association>
+        <EntityType Name="Clinicians">
+          <Key>
+            <PropertyRef Name="ClinicianId" />
+          </Key>
+          <Property Type="Guid" Name="ClinicianId" Nullable="false" annotation:StoreGeneratedPattern="None" />
+          <Property Type="String" Name="LastName" Nullable="false" />
+          <Property Type="String" Name="FirstName" Nullable="false" />
+          <Property Type="Int32" Name="ClinicianRole" Nullable="true" />
+        </EntityType>
+        <Association Name="VisitClinicians">
+          <End Type="RemoteHealth.Visit" Role="Visit" Multiplicity="1" />
+          <End Type="RemoteHealth.Clinicians" Role="Clinicians" Multiplicity="*" />
+        </Association>
+        <EntityType Name="Note" Abstract="true">
+          <Key>
+            <PropertyRef Name="NoteId" />
+          </Key>
+          <Property Type="Guid" Name="NoteId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="CreatedDate" Nullable="false" />
+          <Property Type="String" Name="UpdatedDate" Nullable="false" />
+          <Property Type="Boolean" Name="IsActive" Nullable="false" />
+          <NavigationProperty Name="Clinician" Relationship="RemoteHealth.NotesClinicians" FromRole="Notes" ToRole="Clinicians" />
+        </EntityType>
+        <Association Name="NotesClinicians">
+          <End Type="RemoteHealth.Note" Role="Notes" Multiplicity="1" />
+          <End Type="RemoteHealth.Clinicians" Role="Clinicians" Multiplicity="1" />
+        </Association>
+        <EntityType Name="VisitNote" BaseType="RemoteHealth.Note" >
+          <Property Type="Guid" Name="VisitId" Nullable="false" />
+        </EntityType>
+        <Association Name="VisitVisitNotes">
+          <End Type="RemoteHealth.Visit" Role="Visit" Multiplicity="1" />
+          <End Type="RemoteHealth.VisitNote" Role="VisitNotes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Visit">
+              <PropertyRef Name="VisitId" />
+            </Principal>
+            <Dependent Role="VisitNotes">
+              <PropertyRef Name="VisitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="PatientNote" BaseType="RemoteHealth.Note" >
+          <Property Type="Guid" Name="PatientId" Nullable="false" />
+        </EntityType>
+        <Association Name="PatientPatientNotes">
+          <End Type="RemoteHealth.Patient" Role="Patient" Multiplicity="1" />
+          <End Type="RemoteHealth.PatientNote" Role="PatientNotes" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Patient">
+              <PropertyRef Name="PatientId" />
+            </Principal>
+            <Dependent Role="PatientNotes">
+              <PropertyRef Name="PatientId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="HealthItem">
+          <Key>
+            <PropertyRef Name="HealthItemId" />
+          </Key>
+          <Property Type="Guid" Name="HealthItemId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <NavigationProperty Name="HealthItemType" Relationship="RemoteHealth.HealthItemTypeHealthItem" FromRole="HealthItem" ToRole="HealthItemType" />
+          <Property Type="DateTime" Name="CreatedDate" Nullable="false" />
+          <Property Type="DateTime" Name="UpdatedDate" Nullable="false" />
+          <Property Type="String" Name="HealthItemData" Nullable="false" />
+          <Property Type="Binary" Name="HealthItemVersion" annotation:StoreGeneratedPattern="Computed" ConcurrencyMode="Fixed" FixedLength="true" MaxLength="8" />
+          <NavigationProperty Name="Visit" Relationship="RemoteHealth.VisitHealthItem" FromRole="HealthItem" ToRole="Visit" />
+          <Property Type="Guid" Name="VisitVisitId" Nullable="false" />
+          <NavigationProperty Name="HealthItemNotes" Relationship="RemoteHealth.HealthItemHealthItemNote" FromRole="HealthItem" ToRole="HealthItemNote" />
+        </EntityType>
+        <EntityType Name="HealthItemType">
+          <Key>
+            <PropertyRef Name="HealthItemTypeId" />
+          </Key>
+          <Property Type="Guid" Name="HealthItemTypeId" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="Name" Nullable="false" />
+          <Property Type="String" Name="Version" Nullable="false" />
+        </EntityType>
+        <Association Name="HealthItemTypeHealthItem">
+          <End Type="RemoteHealth.HealthItemType" Role="HealthItemType" Multiplicity="1" />
+          <End Type="RemoteHealth.HealthItem" Role="HealthItem" Multiplicity="1" />
+        </Association>
+        <Association Name="VisitHealthItem">
+          <End Type="RemoteHealth.Visit" Role="Visit" Multiplicity="1" />
+          <End Type="RemoteHealth.HealthItem" Role="HealthItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Visit">
+              <PropertyRef Name="VisitId" />
+            </Principal>
+            <Dependent Role="HealthItem">
+              <PropertyRef Name="VisitVisitId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="HealthItemNote" BaseType="RemoteHealth.Note" >
+          <Property Type="Guid" Name="HealthItemHealthItemId" Nullable="false" />
+        </EntityType>
+        <Association Name="HealthItemHealthItemNote">
+          <End Type="RemoteHealth.HealthItem" Role="HealthItem" Multiplicity="1" />
+          <End Type="RemoteHealth.HealthItemNote" Role="HealthItemNote" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="HealthItem">
+              <PropertyRef Name="HealthItemId" />
+            </Principal>
+            <Dependent Role="HealthItemNote">
+              <PropertyRef Name="HealthItemHealthItemId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="RemoteHealthStoreContainer" CdmEntityContainer="RemoteHealthDataProvider">
+    <EntitySetMapping Name="Patients">
+      <EntityTypeMapping TypeName="IsTypeOf(RemoteHealth.Patient)">
+        <MappingFragment StoreEntitySet="Patients">
+          <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="DateOfBirth" ColumnName="DateOfBirth" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+          <ScalarProperty Name="Gender" ColumnName="Gender" />
+          <ScalarProperty Name="Image" ColumnName="Image" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="PatientIdentifiers">
+      <EntityTypeMapping TypeName="IsTypeOf(RemoteHealth.PatientIdentifiers)">
+        <MappingFragment StoreEntitySet="PatientIdentifiers">
+          <ScalarProperty Name="IdentifierType" ColumnName="IdentifierType" />
+          <ScalarProperty Name="PatientPatientId" ColumnName="PatientPatientId" />
+          <ScalarProperty Name="IdentifierValue" ColumnName="IdentifierValue" />
+          <ScalarProperty Name="IdentifierName" ColumnName="IdentifierName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Visits">
+      <EntityTypeMapping TypeName="IsTypeOf(RemoteHealth.Visit)">
+        <MappingFragment StoreEntitySet="Visits">
+          <ScalarProperty Name="VisitId" ColumnName="VisitId" />
+          <ScalarProperty Name="VisitDate" ColumnName="VisitDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Locations">
+      <EntityTypeMapping TypeName="IsTypeOf(RemoteHealth.Location)">
+        <MappingFragment StoreEntitySet="Locations">
+          <ScalarProperty Name="LocationId" ColumnName="LocationId" />
+          <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+          <ScalarProperty Name="LocationDetails" ColumnName="LocationDetails" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Clinicians">
+      <EntityTypeMapping TypeName="IsTypeOf(RemoteHealth.Clinicians)">
+        <MappingFragment StoreEntitySet="Clinicians">
+          <ScalarProperty Name="ClinicianId" ColumnName="ClinicianId" />
+          <ScalarProperty Name="LastName" ColumnName="LastName" />
+          <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+          <ScalarProperty Name="ClinicianRole" ColumnName="ClinicianRole" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Notes">
+      <EntityTypeMapping TypeName="IsTypeOf(RemoteHealth.Note)">
+        <MappingFragment StoreEntitySet="Notes">
+          <ScalarProperty Name="NoteId" ColumnName="NoteId" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+          <ScalarProperty Name="IsActive" ColumnName="IsActive" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(RemoteHealth.VisitNote)">
+        <MappingFragment StoreEntitySet="Notes_VisitNote">
+          <ScalarProperty Name="NoteId" ColumnName="NoteId" />
+          <ScalarProperty Name="VisitId" ColumnName="VisitId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(RemoteHealth.PatientNote)">
+        <MappingFragment StoreEntitySet="Notes_PatientNote">
+          <ScalarProperty Name="NoteId" ColumnName="NoteId" />
+          <ScalarProperty Name="PatientId" ColumnName="PatientId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+      <EntityTypeMapping TypeName="IsTypeOf(RemoteHealth.HealthItemNote)">
+        <MappingFragment StoreEntitySet="Notes_HealthItemNote">
+          <ScalarProperty Name="NoteId" ColumnName="NoteId" />
+          <ScalarProperty Name="HealthItemHealthItemId" ColumnName="HealthItemHealthItemId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HealthItems">
+      <EntityTypeMapping TypeName="IsTypeOf(RemoteHealth.HealthItem)">
+        <MappingFragment StoreEntitySet="HealthItems">
+          <ScalarProperty Name="HealthItemId" ColumnName="HealthItemId" />
+          <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+          <ScalarProperty Name="UpdatedDate" ColumnName="UpdatedDate" />
+          <ScalarProperty Name="HealthItemData" ColumnName="HealthItemData" />
+          <ScalarProperty Name="HealthItemVersion" ColumnName="HealthItemVersion" />
+          <ScalarProperty Name="VisitVisitId" ColumnName="VisitVisitId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="HealthItemTypes">
+      <EntityTypeMapping TypeName="IsTypeOf(RemoteHealth.HealthItemType)">
+        <MappingFragment StoreEntitySet="HealthItemTypes">
+          <ScalarProperty Name="HealthItemTypeId" ColumnName="HealthItemTypeId" />
+          <ScalarProperty Name="Name" ColumnName="Name" />
+          <ScalarProperty Name="Version" ColumnName="Version" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="VisitLocation" TypeName="RemoteHealth.VisitLocation" StoreEntitySet="Visits">
+      <EndProperty Name="Location">
+        <ScalarProperty Name="LocationId" ColumnName="Location_LocationId" />
+      </EndProperty>
+      <EndProperty Name="Visit">
+        <ScalarProperty Name="VisitId" ColumnName="VisitId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="VisitClinicians" TypeName="RemoteHealth.VisitClinicians" StoreEntitySet="Clinicians">
+      <EndProperty Name="Visit">
+        <ScalarProperty Name="VisitId" ColumnName="VisitClinicians_Clinicians_VisitId" />
+      </EndProperty>
+      <EndProperty Name="Clinicians">
+        <ScalarProperty Name="ClinicianId" ColumnName="ClinicianId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="NotesClinicians" TypeName="RemoteHealth.NotesClinicians" StoreEntitySet="Notes">
+      <EndProperty Name="Clinicians">
+        <ScalarProperty Name="ClinicianId" ColumnName="Clinician_ClinicianId" />
+      </EndProperty>
+      <EndProperty Name="Notes">
+        <ScalarProperty Name="NoteId" ColumnName="NoteId" />
+      </EndProperty>
+    </AssociationSetMapping>
+    <AssociationSetMapping Name="HealthItemTypeHealthItem" TypeName="RemoteHealth.HealthItemTypeHealthItem" StoreEntitySet="HealthItemTypes">
+      <EndProperty Name="HealthItem">
+        <ScalarProperty Name="HealthItemId" ColumnName="HealthItemTypeHealthItem_HealthItemType_HealthItemId" />
+      </EndProperty>
+      <EndProperty Name="HealthItemType">
+        <ScalarProperty Name="HealthItemTypeId" ColumnName="HealthItemTypeId" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <edmx:Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+      </DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram Name="RemoteHealth" ZoomLevel="100" >
+        <EntityTypeShape EntityType="RemoteHealth.Patient" Width="1.5" PointX="0.875" PointY="0.75" Height="2.9417936197916661" />
+        <EntityTypeShape EntityType="RemoteHealth.PatientIdentifiers" Width="1.5" PointX="2.875" PointY="0.875" Height="1.787985026041667" />
+        <AssociationConnector Association="RemoteHealth.PatientPatientIdentifiers">
+          <ConnectorPoint PointX="2.375" PointY="1.7689925130208335" />
+          <ConnectorPoint PointX="2.875" PointY="1.7689925130208335" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="RemoteHealth.Visit" Width="1.5" PointX="4.375" PointY="3.75" Height="1.9802864583333326" />
+        <EntityTypeShape EntityType="RemoteHealth.Location" Width="1.5" PointX="4.5" PointY="1.625" Height="1.59568359375" />
+        <AssociationConnector Association="RemoteHealth.VisitLocation">
+          <ConnectorPoint PointX="5.1875" PointY="3.75" />
+          <ConnectorPoint PointX="5.1875" PointY="3.22068359375" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="RemoteHealth.Clinicians" Width="1.5" PointX="2.5" PointY="3.75" Height="1.7879850260416665" />
+        <AssociationConnector Association="RemoteHealth.VisitClinicians">
+          <ConnectorPoint PointX="4.375" PointY="4.6439925130208337" />
+          <ConnectorPoint PointX="4" PointY="4.6439925130208337" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="RemoteHealth.Note" Width="1.5" PointX="2.5" PointY="6.125" Height="1.9802864583333335" />
+        <AssociationConnector Association="RemoteHealth.NotesClinicians">
+          <ConnectorPoint PointX="3.25" PointY="6.125" />
+          <ConnectorPoint PointX="3.25" PointY="5.5379850260416665" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="RemoteHealth.VisitNote" Width="1.5" PointX="4.375" PointY="6.375" Height="1.2110807291666665" />
+        <InheritanceConnector EntityType="RemoteHealth.VisitNote" >
+          <ConnectorPoint PointX="4" PointY="6.9805403645833337" />
+          <ConnectorPoint PointX="4.375" PointY="6.9805403645833337" />
+        </InheritanceConnector>
+        <AssociationConnector Association="RemoteHealth.VisitVisitNotes">
+          <ConnectorPoint PointX="5.125" PointY="5.7302864583333326" />
+          <ConnectorPoint PointX="5.125" PointY="6.375" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="RemoteHealth.PatientNote" Width="1.5" PointX="0.5" PointY="6" Height="1.2110807291666665" />
+        <InheritanceConnector EntityType="RemoteHealth.PatientNote" >
+          <ConnectorPoint PointX="2.5" PointY="6.6055403645833337" />
+          <ConnectorPoint PointX="2" PointY="6.6055403645833337" />
+        </InheritanceConnector>
+        <AssociationConnector Association="RemoteHealth.PatientPatientNotes">
+          <ConnectorPoint PointX="1.1918024064867097" PointY="3.6917936197916661" />
+          <ConnectorPoint PointX="1.1918024064867097" PointY="6" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="RemoteHealth.HealthItem" Width="1.5" PointX="6.625" PointY="3.875" Height="2.5571907552083326" />
+        <EntityTypeShape EntityType="RemoteHealth.HealthItemType" Width="1.5" PointX="6.75" PointY="1.625" Height="1.59568359375" />
+        <AssociationConnector Association="RemoteHealth.HealthItemTypeHealthItem">
+          <ConnectorPoint PointX="7.4375" PointY="3.22068359375" />
+          <ConnectorPoint PointX="7.4375" PointY="3.875" />
+        </AssociationConnector>
+        <AssociationConnector Association="RemoteHealth.VisitHealthItem">
+          <ConnectorPoint PointX="5.875" PointY="4.8987939453125" />
+          <ConnectorPoint PointX="6.625" PointY="4.8987939453125" />
+        </AssociationConnector>
+        <EntityTypeShape EntityType="RemoteHealth.HealthItemNote" Width="1.5" PointX="6.625" PointY="7.125" Height="1.0187792968750031" />
+        <InheritanceConnector EntityType="RemoteHealth.HealthItemNote" >
+          <ConnectorPoint PointX="4" PointY="7.8769335937500005" />
+          <ConnectorPoint PointX="6.625" PointY="7.8769335937500005" />
+        </InheritanceConnector>
+        <AssociationConnector Association="RemoteHealth.HealthItemHealthItemNote">
+          <ConnectorPoint PointX="7.375" PointY="6.6244921875" />
+          <ConnectorPoint PointX="7.375" PointY="7.125" />
+        </AssociationConnector>
+        <InheritanceConnector EntityType="RemoteHealth.VisitNote">
+          <ConnectorPoint PointX="4" PointY="6.9805403645833337" />
+          <ConnectorPoint PointX="4.375" PointY="6.9805403645833337" />
+        </InheritanceConnector>
+        <InheritanceConnector EntityType="RemoteHealth.PatientNote">
+          <ConnectorPoint PointX="2.5" PointY="6.6680403645833337" />
+          <ConnectorPoint PointX="2" PointY="6.6680403645833337" />
+        </InheritanceConnector>
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

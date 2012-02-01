@@ -1,0 +1,7 @@
+﻿@using RemoteHealth.Data
+@model DateTime?
+
+@if (Model.HasValue)
+{
+    @Html.Raw(Model.Value.ToString(@DataUtility.DateFormat));
+}

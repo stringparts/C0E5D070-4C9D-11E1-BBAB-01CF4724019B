@@ -1,0 +1,35 @@
+﻿@model DateTime?
+<h2>Patient/Visit Search</h2>
+
+@using (Html.BeginForm(null, null, FormMethod.Get, new { name = "searchPatient", id = "searchPatient" }))
+{
+    <div >
+        Last Name : <input id="LastName" name="LastName" type="text" value="" autofocus="true" />
+    </div>
+
+    <div >
+        First Name : <input id="FirstName" name="FirstName" type="text" value="" />
+    </div>
+
+    <div >
+        Date of Birth :
+        @Html.EditorFor(model => model, new { id = "DateOfBirth", nextControlId = "GovernmentId", formatString="" })
+    </div>
+
+    <div >
+        Government id : <input id="GovernmentId" name="GovernmentId" type="text" value="" />
+    </div>
+    
+    <div >
+        Visit date: @Html.EditorFor(model => model, new { id = "VisitDate", nextControlId = "VisitLocation", formatString = "" })
+    </div>
+    
+    <div >
+        Visit location: <input id="VisitLocation" name="VisitLocation" type="text" value="" />
+    </div>
+    <p>
+        <input type="submit" value="Search" id="patientSearch" />
+    </p>
+    
+    <div id="searchResults"></div>
+}
